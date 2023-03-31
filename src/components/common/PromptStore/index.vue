@@ -240,7 +240,7 @@ const downloadPromptTemplate = async () => {
 
 // 移动端自适应相关
 const renderTemplate = () => {
-  const [keyLimit, valueLimit] = isMobile.value ? [10, 30] : [15, 50]
+  const [keyLimit, valueLimit] = isMobile.value ? [10, 65] : [15, 150]
 
   return promptList.value.map((item: { key: string; value: string }) => {
     return {
@@ -264,6 +264,7 @@ const createColumns = (): DataTableColumns<DataProps> => {
   return [
     {
       title: t('store.title'),
+      width: 200,
       key: 'renderKey',
     },
     {
@@ -327,7 +328,7 @@ const dataSource = computed(() => {
 </script>
 
 <template>
-  <NModal v-model:show="show" style="width: 90%; max-width: 900px;" preset="card">
+  <NModal v-model:show="show" style="width: 90%; max-width: 1200px;" preset="card">
     <div class="space-y-4">
       <NTabs type="segment">
         <NTabPane name="local" :tab="$t('store.local')">
@@ -371,7 +372,7 @@ const dataSource = computed(() => {
           </div>
           <NDataTable
             v-if="!isMobile"
-            :max-height="400"
+            :max-height="500"
             :columns="columns"
             :data="dataSource"
             :pagination="pagination"
