@@ -25,7 +25,8 @@ const ErrorCodeMessage: Record<string, string> = {
 }
 
 const timeoutMs: number = !isNaN(+process.env.TIMEOUT_MS) ? +process.env.TIMEOUT_MS : 30 * 1000
-const disableDebug: boolean = process.env.OPENAI_API_DISABLE_DEBUG === 'true'
+const disableDebug: boolean = isNotEmptyString(process.env.OPENAI_API_DISABLE_DEBUG) ? process.env.OPENAI_API_DISABLE_DEBUG === 'true' : true
+const enableLogs: boolean = isNotEmptyString(process.env.OPENAI_API_DISABLE_LOGS) ? process.env.OPENAI_API_DISABLE_LOGS === 'true' : false
 
 let apiModel: ApiModel
 
@@ -108,6 +109,8 @@ async function chatReplyProcess(options: RequestOptions) {
       else
         options = { ...lastContext }
     }
+    if (enableLogs)
+      global.console.log(new Date().toLocaleString(), '：', message)
 
     const response = await api.sendMessage(message, {
       ...options,
