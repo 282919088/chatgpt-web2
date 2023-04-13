@@ -6,7 +6,11 @@
 
 FROM node:latest as frontend
 
-RUN npm install pnpm -g
+RUN apt-get update && \
+    apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g pnpm
 
 
 WORKDIR /app
@@ -29,7 +33,11 @@ RUN pnpm run build
 
 FROM node:latest as backend
 
-RUN  npm install -g pnpm
+RUN apt-get update && \
+    apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g pnpm
 
 
 WORKDIR /app
@@ -51,7 +59,11 @@ RUN pnpm build
 
 FROM node:latest
 
-RUN npm install pnpm -g
+RUN apt-get update && \
+    apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g pnpm
 
 WORKDIR /app
 
