@@ -29,7 +29,6 @@ const enableLogs: boolean = isNotEmptyString(process.env.OPENAI_API_ENABLE_LOGS)
 
 let apiModel: ApiModel
 const model = isNotEmptyString(process.env.OPENAI_API_MODEL) ? process.env.OPENAI_API_MODEL : 'gpt-3.5-turbo'
-const temperature = process.env.OPENAI_API_TEMPERATURE ? Number(process.env.OPENAI_API_TEMPERATURE) : 0.6
 
 if (!isNotEmptyString(process.env.OPENAI_API_KEY) && !isNotEmptyString(process.env.OPENAI_ACCESS_TOKEN))
   throw new Error('Missing OPENAI_API_KEY or OPENAI_ACCESS_TOKEN environment variable')
@@ -44,7 +43,7 @@ let api: ChatGPTAPI | ChatGPTUnofficialProxyAPI
 
     const options: ChatGPTAPIOptions = {
       apiKey: process.env.OPENAI_API_KEY,
-      completionParams: { model, temperature },
+      completionParams: { model },
       debug: !disableDebug,
     }
 
@@ -101,6 +100,8 @@ async function chatReplyProcess(options: RequestOptions) {
       else
         options = { ...lastContext }
     }
+    if (enableLogs)
+      global.console.log(new Date().toLocaleString(), '：', message)
 
     const response = await api.sendMessage(message, {
       ...options,
